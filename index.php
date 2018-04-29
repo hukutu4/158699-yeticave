@@ -22,6 +22,14 @@ $ads = [
     ['name' => 'Маска Oakley Canopy', 'category' => 'Разное', 'price' => 5400, 'url' => 'img/lot-6.jpg'],
 ];
 
+/** Форматирует целое число, представляя его в виде строки, с разделителем пробелом для тысяч, дополненным знаком рубля.
+ * @param int $price
+ * @return string
+ */
+function rurNumberFormat(int $price) {
+    return number_format($price, 0, '.', ' ') . '<b class="rub">р</b>';
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="ru">
@@ -108,7 +116,7 @@ $ads = [
                     <div class="lot__state">
                         <div class="lot__rate">
                             <span class="lot__amount">Стартовая цена</span>
-                            <span class="lot__cost"><?= number_format($ad['price'], 0, '.', ' ') ?><b class="rub">р</b></span>
+                            <span class="lot__cost"><?= rurNumberFormat($ad['price']) ?></span>
                         </div>
                         <div class="lot__timer timer">
 
