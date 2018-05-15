@@ -1,7 +1,7 @@
 <?php
-require_once 'functions.php';
-
 date_default_timezone_set('Europe/Moscow');
+
+require_once 'functions.php';
 
 $is_auth = (bool)rand(0, 1);
 
