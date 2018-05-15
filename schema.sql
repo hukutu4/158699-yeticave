@@ -28,9 +28,6 @@ CREATE TABLE `categories` (
   AUTO_INCREMENT = 7
   DEFAULT CHARSET = utf8;
 
-INSERT INTO `categories` (`id`, `name`)
-VALUES (1, 'Доски и лыжи'), (2, 'Крепления'), (3, 'Ботинки'), (4, 'Одежда'), (5, 'Инструменты'), (6, 'Разное');
-
 CREATE TABLE `lots` (
   `id`             int(11) NOT NULL        AUTO_INCREMENT,
   `date_create`    datetime                DEFAULT NULL,
