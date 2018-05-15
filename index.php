@@ -1,4 +1,6 @@
 <?php
+require_once 'functions.php';
+
 date_default_timezone_set('Europe/Moscow');
 
 $is_auth = (bool)rand(0, 1);
@@ -23,8 +25,6 @@ $ads = [
     ['name' => 'Куртка для сноуборда DC Mutiny Charocal', 'category' => 'Одежда', 'price' => 7500, 'url' => 'img/lot-5.jpg'],
     ['name' => 'Маска Oakley Canopy', 'category' => 'Разное', 'price' => 5400, 'url' => 'img/lot-6.jpg'],
 ];
-
-require_once 'functions.php';
 
 $page_content = renderTemplate('templates/index.php', compact('ads'));
 $layout_content = renderTemplate('templates/layout.php', [
