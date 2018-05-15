@@ -9,7 +9,7 @@ function renderTemplate($filename, $params) {
     if (file_exists($filename)) {
         extract($params);
         ob_start();
-        require_once $filename;
+        require $filename;
         return ob_get_clean();
     }
     return '';

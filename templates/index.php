@@ -47,7 +47,7 @@
                             <span class="lot__cost"><?= rurNumberFormat($ad['price']) ?></span>
                         </div>
                         <div class="lot__timer timer">
-
+                            <?= date_create()->diff(date_create('tomorrow'))->format('%h:%I') ?>
                         </div>
                     </div>
                 </div>
