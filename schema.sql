@@ -13,7 +13,6 @@ CREATE TABLE `users` (
   `created_at` int(11)          DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `users_email_uindex` (`email`),
-  UNIQUE KEY `users_name_uindex` (`name`),
   KEY `users_created_at_index` (`created_at`)
 )
   ENGINE = InnoDB
