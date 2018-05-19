@@ -8,23 +8,55 @@ $is_auth = (bool)rand(0, 1);
 $user_name = 'Константин';
 $user_avatar = 'img/user.jpg';
 
-$categories = [
-    'Доски и лыжи',
-    'Крепления',
-    'Ботинки',
-    'Одежда',
-    'Инструменты',
-    'Разное',
-];
+// Подключение к БД
+$db = mysqli_connect('localhost', 'yeti', 'yeti', 'yeti');
+if ($db === false) {
+    print("Ошибка подключения: " . mysqli_connect_error());
+    die();
+}
 
-$ads = [
-    ['name' => '2014 Rossignol District Snowboard', 'category' => 'Доски и лыжи', 'price' => 10999, 'url' => 'img/lot-1.jpg'],
-    ['name' => 'DC Ply Mens 2016/2017 Snowboard', 'category' => 'Доски и лыжи', 'price' => 159999, 'url' => 'img/lot-2.jpg'],
-    ['name' => 'Крепления Union Contact Pro 2015 года размер L/XL', 'category' => 'Крепления', 'price' => 8000, 'url' => 'img/lot-3.jpg'],
-    ['name' => 'Ботинки для сноуборда DC Mutiny Charocal', 'category' => 'Ботинки', 'price' => 10999, 'url' => 'img/lot-4.jpg'],
-    ['name' => 'Куртка для сноуборда DC Mutiny Charocal', 'category' => 'Одежда', 'price' => 7500, 'url' => 'img/lot-5.jpg'],
-    ['name' => 'Маска Oakley Canopy', 'category' => 'Разное', 'price' => 5400, 'url' => 'img/lot-6.jpg'],
-];
+// Получаем категории
+$sql = "SELECT
+  *
+FROM
+  categories
+;";
+$res = $db->query($sql);
+$categories = [];
+if ($res !== false) {
+    $categories = $res->fetch_all(MYSQLI_ASSOC);
+}
+
+// Получаем открытые лоты
+$sql = "SELECT
+  l.name,
+  l.starting_price as price,
+  l.image_url as url,
+  IF(MAX(b.price) IS NOT NULL, MAX(b.price), l.starting_price) AS current_price,
+  COUNT(distinct b.id) AS bets_count,
+  c.name AS category
+FROM
+  lots l
+LEFT JOIN
+  bets b ON l.id = b.lot_id
+INNER JOIN
+  categories c ON l.category_id = c.id
+WHERE
+  l.winner_id IS NULL
+GROUP BY
+  l.name,
+  l.starting_price,
+  l.image_url,
+  c.name,
+  l.created_at
+ORDER BY
+  l.created_at DESC
+;";
+$res = $db->query($sql);
+$ads = [];
+if ($res !== false) {
+    $ads = $res->fetch_all(MYSQLI_ASSOC);
+}
 
 $page_content = renderTemplate('templates/index.php', compact('ads'));
 $layout_content = renderTemplate('templates/layout.php', [
