@@ -75,25 +75,30 @@ ORDER BY
 # Показать лот по его id. Получите также название категории, к которой принадлежит лот
 SELECT
   l.*,
-  c.name as category_name
+  c.name as category_name,
+  IFNULL((select MAX(b.price) from bets b where b.lot_id = l.id), l.starting_price) AS current_price
 FROM
   lots l
-INNER JOIN
+  INNER JOIN
   categories c ON l.category_id = c.id
 WHERE
-  l.id = 2
+  l.id = 3
 ;
 
 # Получить список самых свежих ставок для лота по его идентификатору;
 SELECT
-  *
+  u.name as 'user_name',
+  b.price,
+  b.created_at
 FROM
-  bets
+  bets b
+inner join
+  users u on u.id = b.user_id
 WHERE
   lot_id = 3
 ORDER BY
   created_at DESC
-LIMIT 2;
+LIMIT 10;
 
 # --------- ОБНОВЛЕНИЕ ---------
 # Обновить название лота по его идентификатору;
