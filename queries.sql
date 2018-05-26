@@ -23,12 +23,12 @@ VALUES
 INSERT INTO `lots`
 (`id`, `author_id`, `winner_id`, `category_id`, `name`, `description`, `image_url`, `starting_price`, `bet_step`, `created_at`, `updated_at`)
 VALUES
-  (1, 1, 2, 1, '2014 Rossignol District Snowboard', NULL, 'img/lot-1.jpg', 10999.00, 100.00, 1526500299, 1526542432),
-  (2, 1, NULL, 1, 'DC Ply Mens 2016/2017 Snowboard', NULL, 'img/lot-2.jpg', 159999.00, 100.00, 1526511299, NULL),
-  (3, 1, NULL, 2, 'Крепления Union Contact Pro 2015 года размер L/XL', NULL, 'img/lot-3.jpg', 8000.00, 100.00, 1526516299, NULL),
-  (4, 1, NULL, 3, 'Ботинки для сноуборда DC Mutiny Charocal', NULL, 'img/lot-4.jpg', 10999.00, 100.00, 1526520299, NULL),
-  (5, 2, NULL, 4, 'Куртка для сноуборда DC Mutiny Charocal', NULL, 'img/lot-5.jpg', 7500.00, 100.00, 1526523299, NULL),
-  (6, 2, NULL, 6, 'Маска Oakley Canopy', NULL, 'img/lot-6.jpg', 5400.00, 100.00, 1526540299, NULL);
+  (1, 1, 2, 1, '2014 Rossignol District Snowboard', 'Идеальный во всех отношениях сноуборд!', 'img/lot-1.jpg', 10999.00, 100.00, 1526500299, 1526542432),
+  (2, 1, NULL, 1, 'DC Ply Mens 2016/2017 Snowboard', 'Легкий маневренный сноуборд, готовый дать жару в любом парке, растопив снег мощным щелчкоми четкими дугами. Стекловолокно Bi-Ax, уложенное в двух направлениях, наделяет этот снаряд отличной гибкостью и отзывчивостью, а симметричная геометрия в сочетании с классическим прогибом кэмбер позволит уверенно держать высокие скорости. А если к концу катального дня сил совсем не останется, просто посмотрите на Вашу доску и улыбнитесь, крутая графика от Шона Кливера еще никого не оставляла равнодушным.', 'img/lot-2.jpg', 159999.00, 100.00, 1526511299, NULL),
+  (3, 1, NULL, 2, 'Крепления Union Contact Pro 2015 года размер L/XL', 'Отличные крепления!', 'img/lot-3.jpg', 8000.00, 100.00, 1526516299, NULL),
+  (4, 1, NULL, 3, 'Ботинки для сноуборда DC Mutiny Charocal', 'Суперские ботинки!', 'img/lot-4.jpg', 10999.00, 100.00, 1526520299, NULL),
+  (5, 2, NULL, 4, 'Куртка для сноуборда DC Mutiny Charocal', 'Замечательная куртка!', 'img/lot-5.jpg', 7500.00, 100.00, 1526523299, NULL),
+  (6, 2, NULL, 6, 'Маска Oakley Canopy', 'У вас есть маска? Теперь у вас будет действительно хорошая маска!', 'img/lot-6.jpg', 5400.00, 100.00, 1526540299, NULL);
 
 # Ставки
 INSERT INTO `bets`
@@ -75,25 +75,30 @@ ORDER BY
 # Показать лот по его id. Получите также название категории, к которой принадлежит лот
 SELECT
   l.*,
-  c.name as category_name
+  c.name as category_name,
+  IFNULL((select MAX(b.price) from bets b where b.lot_id = l.id), l.starting_price) AS current_price
 FROM
   lots l
-INNER JOIN
+  INNER JOIN
   categories c ON l.category_id = c.id
 WHERE
-  l.id = 2
+  l.id = 3
 ;
 
 # Получить список самых свежих ставок для лота по его идентификатору;
 SELECT
-  *
+  u.name as 'user_name',
+  b.price,
+  b.created_at
 FROM
-  bets
+  bets b
+inner join
+  users u on u.id = b.user_id
 WHERE
   lot_id = 3
 ORDER BY
   created_at DESC
-LIMIT 2;
+LIMIT 10;
 
 # --------- ОБНОВЛЕНИЕ ---------
 # Обновить название лота по его идентификатору;
