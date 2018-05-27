@@ -4,11 +4,15 @@
  * @return mysqli
  */
 function getDbConnection() {
-    // Подключение к БД
-    $db = mysqli_connect('localhost', 'yeti', 'yeti', 'yeti');
-    if ($db === false) {
-        print("Ошибка подключения: " . mysqli_connect_error());
-        die();
+    static $db;
+    // Проверяем, есть ли уже коннект к БД
+    if (is_null($db)) {
+        // Если коннекта нет - подключаемся к БД
+        $db = mysqli_connect('localhost', 'yeti', 'yeti', 'yeti');
+        if ($db === false) {
+            print("Ошибка подключения: " . mysqli_connect_error());
+            die();
+        }
     }
     return $db;
 }
@@ -28,6 +32,29 @@ function getAllCategories() {
         $result = $mysqli_result->fetch_all(MYSQLI_ASSOC);
     }
     return $result;
+}
+
+/** Получаем категорию по id
+ * @param int $id
+ * @return array|mixed
+ */
+function getCategory($id) {
+    $db = getDbConnection();
+    $sql = "SELECT
+      *
+    FROM
+      categories
+    WHERE 
+      id = ?";
+    $mysqli_stmt = $db->prepare($sql);
+    $mysqli_stmt->bind_param('i', $id);
+    $mysqli_stmt->execute();
+    $mysqli_result = $mysqli_stmt->get_result();
+    $result = [];
+    if ($mysqli_result !== false) {
+        $result = $mysqli_result->fetch_all(MYSQLI_ASSOC);
+    }
+    return $result[0]??[];
 }
 
 /** Получаем открытые лоты
@@ -121,3 +148,33 @@ function getBets(int $lot_id) {
     return $result;
 }
 
+/** Добавление нового лота
+ * @param array $lot
+ * @return bool
+ */
+function addLot(array $lot) {
+    $db = getDbConnection();
+    $sql = "INSERT INTO `lots`(`author_id`, `category_id`, `name`, `description`, `image_url`, `starting_price`, `bet_step`, `created_at`, `updated_at`) VALUES (?,?,?,?,?,?,?,?,?)";
+    $mysqli_stmt = $db->prepare($sql);
+    // TODO: убрать хардкод после реализации аутентификации пользователей
+    $author_id = 1;
+    $lot_created_time = time();
+    $lot_end_time = strtotime($lot['lot-date']);
+    $mysqli_stmt->bind_param('iisssddii',
+        $author_id,
+        $lot['category'],
+        $lot['lot-name'],
+        $lot['message'],
+        $lot['image-url'],
+        $lot['lot-rate'],
+        $lot['lot-step'],
+        $lot_created_time,
+        $lot_end_time
+    );
+    if ($mysqli_stmt->execute()) {
+        $result = $db->insert_id;
+    } else {
+        $result = false;
+    }
+    return $result;
+}
