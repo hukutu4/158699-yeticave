@@ -148,3 +148,31 @@ function getBets(int $lot_id) {
     return $result;
 }
 
+/** Добавление нового лота
+ * @param array $lot
+ * @return bool
+ */
+function addLot(array $lot) {
+    $db = getDbConnection();
+    $sql = "INSERT INTO `lots`(`author_id`, `category_id`, `name`, `description`, `image_url`, `starting_price`, `bet_step`, `created_at`) VALUES (?,?,?,?,?,?,?,?)";
+    $mysqli_stmt = $db->prepare($sql);
+    // TODO: убрать хардкод после реализации аутентификации пользователей
+    $author_id = 1;
+    $lot_time = strtotime($lot['lot-date']);
+    $mysqli_stmt->bind_param('iisssddi',
+        $author_id,
+        $lot['category'],
+        $lot['lot-name'],
+        $lot['message'],
+        $lot['image-url'],
+        $lot['lot-rate'],
+        $lot['lot-step'],
+        $lot_time
+    );
+    if ($mysqli_stmt->execute()) {
+        $result = $db->insert_id;
+    } else {
+        $result = false;
+    }
+    return $result;
+}

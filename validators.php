@@ -10,6 +10,8 @@ function validateNewLot(array &$lot) {
     // Валидация категории
     if (!preg_match('/^\d+$/', $lot['category']) || empty(getCategory($lot['category']))) {
         $errors['category'] = 'Выберите категорию';
+    } else {
+        $lot['category'] = (int)$lot['category'];
     }
 
     // Валидация наименования
@@ -37,6 +39,7 @@ function validateNewLot(array &$lot) {
     // Валидация начальной цены
     if (!empty($lot['lot-rate'])) {
         $lot['lot-rate'] = filter_var($lot['lot-rate'], FILTER_SANITIZE_NUMBER_FLOAT);
+        $lot['lot-rate'] = (double)$lot['lot-rate'];
     } else {
         $errors['lot-rate'] = 'Введите начальную цену';
     }
@@ -44,12 +47,13 @@ function validateNewLot(array &$lot) {
     // Валидация шага ставки
     if (!empty($lot['lot-step'])) {
         $lot['lot-step'] = filter_var($lot['lot-step'], FILTER_SANITIZE_NUMBER_FLOAT);
+        $lot['lot-step'] = (double)$lot['lot-step'];
     } else {
         $errors['lot-step'] = 'Введите шаг ставки';
     }
 
     // Валидация даты завершения торгов
-    if (!empty($lot['lot-date']) && ($date_end = date_create($lot['lot-date']))) {
+    if (!empty($lot['lot-date']) && ($date_end = date_create($lot['lot-date'])) instanceof DateTime) {
         if ($date_end->getTimestamp() < time()) {
             $errors['lot-date'] = 'Дата завершения торгов должна быть позже текущего дня';
         }
@@ -66,8 +70,8 @@ function validateNewLot(array &$lot) {
         if ($file_type !== 'image/jpeg') {
             $errors['avatar'] = "Загрузите картинку в формате jpeg";
         }
-        if ($file_size > 200000) {
-            $errors['avatar'] = "Максимальный размер файла: 200Кб";
+        if ($file_size > 5000000) {
+            $errors['avatar'] = "Максимальный размер файла: 5Мб";
         }
         if (!isset($errors['avatar'])) {
             $file_name = $lot['avatar']['name'];
@@ -76,7 +80,7 @@ function validateNewLot(array &$lot) {
             move_uploaded_file($lot['avatar']['tmp_name'], $file_path . $file_name);
             $lot['image-url'] = $file_url;
         }
-    } elseif(empty($lot['image-url'])) {
+    } elseif (empty($lot['image-url'])) {
         $errors['avatar'] = 'Добавьте фотографию';
     }
 

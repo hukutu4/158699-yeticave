@@ -40,11 +40,18 @@ if (isset($_GET['add-lot'])) {
     if ($lot !== []) {
         $errors = validateNewLot($lot);
     }
-    $page_content = renderTemplate('templates/add.php', [
-        'lot' => $lot,
-        'categories' => getAllCategories(),
-        'errors' => $errors,
-    ]);
+    if ($errors === [] && $lot !== []) {
+        $lot_id = addLot($lot);
+        $url = "/?lot=" . $lot_id;
+        header("Location: " . $url);
+        exit;
+    } else {
+        $page_content = renderTemplate('templates/add.php', [
+            'lot' => $lot,
+            'categories' => getAllCategories(),
+            'errors' => $errors,
+        ]);
+    }
 }
 
 // Содержимое страницы
@@ -55,7 +62,7 @@ if (!isset($page_content)) {
 // Шаблон страниц с хедером и футером (навигацией и пр.)
 $layout_content = renderTemplate('templates/layout.php', [
     'is_auth' => $is_auth,
-    'title' => $title??'YetiCave',
+    'title' => $title ?? 'YetiCave',
     'user_avatar' => $user_avatar,
     'user_name' => $user_name,
     'content' => $page_content,
