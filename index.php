@@ -33,6 +33,11 @@ if (isset($_GET['add-lot'])) {
     $errors = [];
     if ($_POST !== []) {
         $lot = $_POST;
+    }
+    if (isset($_FILES['avatar'])) {
+        $lot['avatar'] = $_FILES['avatar'];
+    }
+    if ($lot !== []) {
         $errors = validateNewLot($lot);
     }
     $page_content = renderTemplate('templates/add.php', [

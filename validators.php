@@ -57,5 +57,28 @@ function validateNewLot(array &$lot) {
         $errors['lot-date'] = 'Введите дату завершения торгов';
     }
 
+    // Валидация файла аватара
+    if (isset($lot['avatar']) && !empty($lot['avatar']['tmp_name'])) {
+        $finfo = finfo_open(FILEINFO_MIME_TYPE);
+        $file_name = $lot['avatar']['tmp_name'];
+        $file_size = $lot['avatar']['size'];
+        $file_type = finfo_file($finfo, $file_name);
+        if ($file_type !== 'image/jpeg') {
+            $errors['avatar'] = "Загрузите картинку в формате jpeg";
+        }
+        if ($file_size > 200000) {
+            $errors['avatar'] = "Максимальный размер файла: 200Кб";
+        }
+        if (!isset($errors['avatar'])) {
+            $file_name = $lot['avatar']['name'];
+            $file_path = __DIR__ . '/img/';
+            $file_url = '/img/' . $file_name;
+            move_uploaded_file($lot['avatar']['tmp_name'], $file_path . $file_name);
+            $lot['image-url'] = $file_url;
+        }
+    } elseif(empty($lot['image-url'])) {
+        $errors['avatar'] = 'Добавьте фотографию';
+    }
+
     return $errors;
 }

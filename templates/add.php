@@ -29,7 +29,7 @@
         </li>
     </ul>
 </nav>
-<form class="form form--add-lot container <?=($errors!==[])?'form--invalid':''?>" action="/?add-lot" method="post"> <!-- form--invalid -->
+<form class="form form--add-lot container <?=($errors!==[])?'form--invalid':''?>" action="/?add-lot" method="post" enctype="multipart/form-data"> <!-- form--invalid -->
     <h2>Добавление лота</h2>
     <div class="form__container-two">
         <div class="form__item <?= isset($errors['lot-name']) ? 'form__item--invalid' : '' ?>"><!-- form__item--invalid -->
@@ -38,7 +38,7 @@
                    placeholder="Введите наименование лота" <?= (isset($lot['lot-name'])) ? 'value="' . $lot['lot-name'] . '"' : '' ?>>
             <span class="form__error"><?=$errors['lot-name']??''?></span>
         </div>
-        <div class="form__item">
+        <div class="form__item <?= isset($errors['category']) ? 'form__item--invalid' : '' ?>">
             <label for="category">Категория</label>
             <select id="category" name="category" >
                 <option>Выберите категорию</option>
@@ -47,7 +47,7 @@
                         value="<?= $category['id'] ?>"><?= $category['name'] ?></option>
                 <?php endforeach; ?>
             </select>
-            <span class="form__error">Выберите категорию</span>
+            <span class="form__error"><?=$errors['category']??''?></span>
         </div>
     </div>
     <div class="form__item form__item--wide <?= isset($errors['message']) ? 'form__item--invalid' : '' ?>">
@@ -55,20 +55,22 @@
         <textarea id="message" name="message" placeholder="Напишите описание лота"><?= $lot['message'] ?? '' ?></textarea>
         <span class="form__error"><?=$errors['message']??''?></span>
     </div>
-    <div class="form__item form__item--file"> <!-- form__item--uploaded -->
+    <div class="form__item form__item--file <?= isset($errors['avatar']) ? 'form__item--invalid' : '' ?> <?= !empty($lot['image-url']) ? 'form__item--uploaded' : '' ?>"><!-- form__item--uploaded -->
         <label>Изображение</label>
         <div class="preview">
             <button class="preview__remove" type="button">x</button>
             <div class="preview__img">
-                <img src="img/avatar.jpg" width="113" height="113" alt="Изображение лота">
+                <img src="<?=$lot['image-url']??''?>" width="113" height="113" alt="Изображение лота">
             </div>
         </div>
         <div class="form__input-file">
-            <input class="visually-hidden" type="file" id="photo2" value="">
+            <input class="visually-hidden" type="file" id="photo2" name="avatar" value="">
             <label for="photo2">
                 <span>+ Добавить</span>
             </label>
+            <input id="image-url" type="hidden" name="image-url" <?= (isset($lot['image-url'])) ? 'value="' . $lot['image-url'] . '"' : '' ?>>
         </div>
+        <span class="form__error"><?=$errors['avatar']??''?></span>
     </div>
     <div class="form__container-three">
         <div class="form__item form__item--small <?= isset($errors['lot-rate']) ? 'form__item--invalid' : '' ?>">
