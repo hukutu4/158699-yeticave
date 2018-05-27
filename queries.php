@@ -34,6 +34,29 @@ function getAllCategories() {
     return $result;
 }
 
+/** Получаем категорию по id
+ * @param int $id
+ * @return array|mixed
+ */
+function getCategory($id) {
+    $db = getDbConnection();
+    $sql = "SELECT
+      *
+    FROM
+      categories
+    WHERE 
+      id = ?";
+    $mysqli_stmt = $db->prepare($sql);
+    $mysqli_stmt->bind_param('i', $id);
+    $mysqli_stmt->execute();
+    $mysqli_result = $mysqli_stmt->get_result();
+    $result = [];
+    if ($mysqli_result !== false) {
+        $result = $mysqli_result->fetch_all(MYSQLI_ASSOC);
+    }
+    return $result[0]??[];
+}
+
 /** Получаем открытые лоты
  * @return array|mixed
  */
