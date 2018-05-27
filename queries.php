@@ -4,11 +4,15 @@
  * @return mysqli
  */
 function getDbConnection() {
-    // Подключение к БД
-    $db = mysqli_connect('localhost', 'yeti', 'yeti', 'yeti');
-    if ($db === false) {
-        print("Ошибка подключения: " . mysqli_connect_error());
-        die();
+    static $db;
+    // Проверяем, есть ли уже коннект к БД
+    if (is_null($db)) {
+        // Если коннекта нет - подключаемся к БД
+        $db = mysqli_connect('localhost', 'yeti', 'yeti', 'yeti');
+        if ($db === false) {
+            print("Ошибка подключения: " . mysqli_connect_error());
+            die();
+        }
     }
     return $db;
 }
