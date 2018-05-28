@@ -9,6 +9,7 @@ $is_auth = (bool)rand(0, 1);
 
 $user_name = 'Константин';
 $user_avatar = 'img/user.jpg';
+$categories = getAllCategories();
 
 // Страница с существующим лотом
 if (isset($_GET['lot'])) {
@@ -48,7 +49,7 @@ if (isset($_GET['add-lot'])) {
     } else {
         $page_content = renderTemplate('templates/add.php', [
             'lot' => $lot,
-            'categories' => getAllCategories(),
+            'categories' => $categories,
             'errors' => $errors,
         ]);
     }
@@ -56,7 +57,7 @@ if (isset($_GET['add-lot'])) {
 
 // Содержимое страницы
 if (!isset($page_content)) {
-    $page_content = renderTemplate('templates/index.php', ['lots' => getOpenLots()]);
+    $page_content = renderTemplate('templates/index.php', ['lots' => getOpenLots(), 'categories' => $categories]);
 }
 
 // Шаблон страниц с хедером и футером (навигацией и пр.)
@@ -66,6 +67,6 @@ $layout_content = renderTemplate('templates/layout.php', [
     'user_avatar' => $user_avatar,
     'user_name' => $user_name,
     'content' => $page_content,
-    'categories' => getAllCategories(),
+    'categories' => $categories,
 ]);
 print($layout_content);

@@ -7,6 +7,7 @@
  * @var string $content
  * @var array $categories
  */
+$nav = renderTemplate('templates/nav.php', ['categories' => $categories]);;
 ?>
 
 <!DOCTYPE html>
@@ -53,7 +54,10 @@
     </div>
 </header>
 
-<main class="container"><?=$content?></main>
+<main class="container">
+    <?=$nav?>
+    <?=$content?>
+</main>
 
 <footer class="main-footer">
     <nav class="nav">
