@@ -5,11 +5,18 @@ require_once 'functions.php';
 require_once 'queries.php';
 require_once 'validators.php';
 
-$is_auth = (bool)rand(0, 1);
+$is_auth = false;
+//$is_auth = (bool)rand(0, 1);
 
 $user_name = 'Константин';
 $user_avatar = 'img/user.jpg';
 $categories = getAllCategories();
+
+// Страница регистрации
+if (isset($_GET['sign-up'])) {
+    $title = 'Регистрация';
+    $page_content = renderTemplate('templates/sign-up.php');
+}
 
 // Страница с существующим лотом
 if (isset($_GET['lot'])) {
