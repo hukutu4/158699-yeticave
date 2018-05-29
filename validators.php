@@ -111,7 +111,7 @@ function validateNewUser(&$new_user) {
     }
 
     // Валидация файла аватара
-    validateAvatarImage($new_user, $errors);
+    validateAvatarImage($new_user, $errors, false);
 
     return $errors;
 }
@@ -119,9 +119,10 @@ function validateNewUser(&$new_user) {
 /** Валидация файла аватара
  * @param $subject
  * @param $errors
+ * @param bool $required
  * @return bool
  */
-function validateAvatarImage(&$subject, &$errors) {
+function validateAvatarImage(&$subject, &$errors, $required = true) {
     if (isset($subject['avatar']) && !empty($subject['avatar']['tmp_name'])) {
         $finfo = finfo_open(FILEINFO_MIME_TYPE);
         $file_name = $subject['avatar']['tmp_name'];
@@ -140,7 +141,7 @@ function validateAvatarImage(&$subject, &$errors) {
             move_uploaded_file($subject['avatar']['tmp_name'], $file_path . $file_name);
             $subject['image-url'] = $file_url;
         }
-    } elseif (empty($subject['image-url'])) {
+    } elseif (empty($subject['image-url']) && $required) {
         $errors['avatar'] = 'Добавьте фотографию';
     }
     return empty($errors['avatar']);
