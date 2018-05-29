@@ -15,7 +15,28 @@ $categories = getAllCategories();
 // Страница регистрации
 if (isset($_GET['sign-up'])) {
     $title = 'Регистрация';
-    $page_content = renderTemplate('templates/sign-up.php');
+    $new_user = [];
+    $errors = [];
+    if ($_POST !== []) {
+        $new_user = $_POST;
+    }
+    if (isset($_FILES['avatar'])) {
+        $new_user['avatar'] = $_FILES['avatar'];
+    }
+    if ($new_user !== []) {
+        $errors = validateNewUser($new_user);
+    }
+    if ($errors === [] && $new_user !== []) {
+        addNewUser($new_user);
+        $url = "/?login";
+        header("Location: " . $url);
+        exit;
+    } else {
+        $page_content = renderTemplate('templates/sign-up.php', [
+            'new_user' => $new_user,
+            'errors' => $errors,
+        ]);
+    }
 }
 
 // Страница с существующим лотом
