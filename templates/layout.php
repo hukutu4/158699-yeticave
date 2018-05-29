@@ -7,6 +7,7 @@
  * @var string $content
  * @var array $categories
  */
+$nav = renderTemplate('templates/nav.php', ['categories' => $categories]);;
 ?>
 
 <!DOCTYPE html>
@@ -42,7 +43,7 @@
             <?php else: ?>
                 <ul class="user-menu__list">
                     <li class="user-menu__item">
-                        <a href="#">Регистрация</a>
+                        <a href="/?sign-up">Регистрация</a>
                     </li>
                     <li class="user-menu__item">
                         <a href="#">Вход</a>
@@ -53,7 +54,10 @@
     </div>
 </header>
 
-<main class="container"><?=$content?></main>
+<main class="container">
+    <?=$nav?>
+    <?=$content?>
+</main>
 
 <footer class="main-footer">
     <nav class="nav">

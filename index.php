@@ -5,10 +5,39 @@ require_once 'functions.php';
 require_once 'queries.php';
 require_once 'validators.php';
 
-$is_auth = (bool)rand(0, 1);
+$is_auth = false;
+//$is_auth = (bool)rand(0, 1);
 
 $user_name = 'Константин';
 $user_avatar = 'img/user.jpg';
+$categories = getAllCategories();
+
+// Страница регистрации
+if (isset($_GET['sign-up'])) {
+    $title = 'Регистрация';
+    $new_user = [];
+    $errors = [];
+    if ($_POST !== []) {
+        $new_user = $_POST;
+    }
+    if (isset($_FILES['avatar'])) {
+        $new_user['avatar'] = $_FILES['avatar'];
+    }
+    if ($new_user !== []) {
+        $errors = validateNewUser($new_user);
+    }
+    if ($errors === [] && $new_user !== []) {
+        addNewUser($new_user);
+        $url = "/?login";
+        header("Location: " . $url);
+        exit;
+    } else {
+        $page_content = renderTemplate('templates/sign-up.php', [
+            'new_user' => $new_user,
+            'errors' => $errors,
+        ]);
+    }
+}
 
 // Страница с существующим лотом
 if (isset($_GET['lot'])) {
@@ -48,7 +77,7 @@ if (isset($_GET['add-lot'])) {
     } else {
         $page_content = renderTemplate('templates/add.php', [
             'lot' => $lot,
-            'categories' => getAllCategories(),
+            'categories' => $categories,
             'errors' => $errors,
         ]);
     }
@@ -56,7 +85,7 @@ if (isset($_GET['add-lot'])) {
 
 // Содержимое страницы
 if (!isset($page_content)) {
-    $page_content = renderTemplate('templates/index.php', ['lots' => getOpenLots()]);
+    $page_content = renderTemplate('templates/index.php', ['lots' => getOpenLots(), 'categories' => $categories]);
 }
 
 // Шаблон страниц с хедером и футером (навигацией и пр.)
@@ -66,6 +95,6 @@ $layout_content = renderTemplate('templates/layout.php', [
     'user_avatar' => $user_avatar,
     'user_name' => $user_name,
     'content' => $page_content,
-    'categories' => getAllCategories(),
+    'categories' => $categories,
 ]);
 print($layout_content);

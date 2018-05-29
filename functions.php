@@ -5,7 +5,7 @@
  * @param array $params
  * @return string
  */
-function renderTemplate($filename, $params) {
+function renderTemplate($filename, $params = []) {
     if (file_exists($filename)) {
         extract($params);
         ob_start();

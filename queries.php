@@ -178,3 +178,51 @@ function addLot(array $lot) {
     }
     return $result;
 }
+
+/** Получить пользователя по email
+ * @param string $email
+ * @return array|mixed
+ */
+function getUserByEmail(string $email) {
+    $db = getDbConnection();
+    $sql = "SELECT
+      *
+    FROM
+      users
+    WHERE
+      email = ?";
+    $mysqli_stmt = $db->prepare($sql);
+    $mysqli_stmt->bind_param('s', $email);
+    $mysqli_stmt->execute();
+    $mysqli_result = $mysqli_stmt->get_result();
+    $result = [];
+    if ($mysqli_result !== false) {
+        $result = $mysqli_result->fetch_all(MYSQLI_ASSOC);
+    }
+    return $result[0]??[];
+}
+
+/** Добавление нового пользователя
+ * @param array $user
+ * @return bool
+ */
+function addNewUser(array $user) {
+    $db = getDbConnection();
+    $sql = "INSERT INTO `users`(`email`, `name`, `password`, `avatar_url`, `contacts`, `created_at`) VALUES (?,?,?,?,?,?)";
+    $mysqli_stmt = $db->prepare($sql);
+    $created_at = time();
+    $mysqli_stmt->bind_param('sssssi',
+        $user['email'],
+        $user['name'],
+        $user['password'],
+        $user['image-url'],
+        $user['message'],
+        $created_at
+    );
+    if ($mysqli_stmt->execute()) {
+        $result = $db->insert_id;
+    } else {
+        $result = false;
+    }
+    return $result;
+}
