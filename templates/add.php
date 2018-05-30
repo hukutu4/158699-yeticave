@@ -10,11 +10,11 @@
       method="post" enctype="multipart/form-data"> <!-- form--invalid -->
     <h2>Добавление лота</h2>
     <div class="form__container-two">
-        <div class="form__item <?= isset($errors['lot-name']) ? 'form__item--invalid' : '' ?>"><!-- form__item--invalid -->
+        <div class="form__item <?= isset($errors['lot_name']) ? 'form__item--invalid' : '' ?>"><!-- form__item--invalid -->
             <label for="lot-name">Наименование</label>
-            <input id="lot-name" type="text" name="lot-name"
-                   placeholder="Введите наименование лота" <?= (isset($lot['lot-name'])) ? 'value="' . $lot['lot-name'] . '"' : '' ?>>
-            <span class="form__error"><?= $errors['lot-name'] ?? '' ?></span>
+            <input id="lot-name" type="text" name="lot_name"
+                   placeholder="Введите наименование лота" <?= (isset($lot['lot_name'])) ? 'value="' . $lot['lot_name'] . '"' : '' ?>>
+            <span class="form__error"><?= $errors['lot_name'] ?? '' ?></span>
         </div>
         <div class="form__item <?= isset($errors['category']) ? 'form__item--invalid' : '' ?>">
             <label for="category">Категория</label>
@@ -52,15 +52,15 @@
         <span class="form__error"><?= $errors['avatar'] ?? '' ?></span>
     </div>
     <div class="form__container-three">
-        <div class="form__item form__item--small <?= isset($errors['lot-rate']) ? 'form__item--invalid' : '' ?>">
+        <div class="form__item form__item--small <?= isset($errors['lot_rate']) ? 'form__item--invalid' : '' ?>">
             <label for="lot-rate">Начальная цена</label>
-            <input id="lot-rate" type="number" name="lot-rate" placeholder="0" <?= (isset($lot['lot-rate'])) ? 'value="' . $lot['lot-rate'] . '"' : '' ?>>
-            <span class="form__error"><?= $errors['lot-rate'] ?? '' ?></span>
+            <input id="lot-rate" type="number" name="lot_rate" placeholder="0" <?= (isset($lot['lot_rate'])) ? 'value="' . $lot['lot_rate'] . '"' : '' ?>>
+            <span class="form__error"><?= $errors['lot_rate'] ?? '' ?></span>
         </div>
-        <div class="form__item form__item--small <?= isset($errors['lot-step']) ? 'form__item--invalid' : '' ?>">
+        <div class="form__item form__item--small <?= isset($errors['lot_step']) ? 'form__item--invalid' : '' ?>">
             <label for="lot-step">Шаг ставки</label>
-            <input id="lot-step" type="number" name="lot-step" placeholder="0" <?= (isset($lot['lot-step'])) ? 'value="' . $lot['lot-step'] . '"' : '' ?>>
-            <span class="form__error"><?= $errors['lot-step'] ?? '' ?></span>
+            <input id="lot-step" type="number" name="lot_step" placeholder="0" <?= (isset($lot['lot_step'])) ? 'value="' . $lot['lot_step'] . '"' : '' ?>>
+            <span class="form__error"><?= $errors['lot_step'] ?? '' ?></span>
         </div>
         <div class="form__item <?= isset($errors['lot-date']) ? 'form__item--invalid' : '' ?>">
             <label for="lot-date">Дата окончания торгов</label>

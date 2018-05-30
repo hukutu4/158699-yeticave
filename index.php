@@ -66,6 +66,17 @@ if (isset($_GET['sign-up'])) {
 
 // Страница с существующим лотом
 if (isset($_GET['lot'])) {
+    $new_bet = [];
+    $errors = [];
+    if ($_POST !== [] && isset($_SESSION['user'])) {
+        $new_bet = $_POST;
+    }
+    if ($new_bet !== []) {
+        $errors = validateNewBet($new_bet);
+    }
+    if ($errors === [] && $new_bet !== []) {
+        $lot_id = addBet($new_bet);
+    }
     // Проверка на число
     if (!preg_match('/^\d+$/', $_GET['lot'])) {
         return http_response_code(404);
@@ -75,7 +86,13 @@ if (isset($_GET['lot'])) {
     // Проверка существования лота в базе
     if (!empty($lot)) {
         $title = $lot['name'];
-        $page_content = renderTemplate('templates/lot.php', ['lot' => $lot, 'bets' => $bets, 'categories' => $categories]);
+        $page_content = renderTemplate('templates/lot.php', [
+            'lot' => $lot,
+            'bets' => $bets,
+            'categories' => $categories,
+            'new_bet' => $new_bet,
+            'errors' => $errors,
+        ]);
     } else {
         return http_response_code(404);
     }

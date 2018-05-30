@@ -2,6 +2,8 @@
 /**
  * @var array $lot
  * @var array $bets
+ * @var array $errors
+ * @var array $new_bet
  * @var array $categories
  */
 $min_cost = $lot['current_price'] + $lot['bet_step'];
@@ -32,12 +34,14 @@ $show_add_bet_form = isset($_SESSION['user']) && $_SESSION['user']['id'] != $lot
                             Мин. ставка <span><?= rurNumberFormat($min_cost) ?></span>
                         </div>
                     </div>
-                    <form class="lot-item__form" action="https://echo.htmlacademy.ru" method="post">
-                        <p class="lot-item__form-item">
+                    <form class="lot-item__form <?= ($errors !== []) ? 'form--invalid' : '' ?>" action="/?lot=<?= $lot['id'] ?>" method="post">
+                        <p class="lot-item__form-item <?= isset($errors['cost']) ? 'form__item--invalid' : '' ?>">
                             <label for="cost">Ваша ставка</label>
-                            <input id="cost" type="number" name="cost"
+                            <input id="cost" type="number" name="cost" <?= (isset($new_bet['cost'])) ? 'value="' . $new_bet['cost'] . '"' : '' ?>
                                    placeholder="<?= number_format($min_cost, 0, '.', ' ') ?>">
+                            <span class="form__error"><?= $errors['cost'] ?? '' ?></span>
                         </p>
+                        <input id="lot-id" type="hidden" name="lot_id" <?= (isset($lot['id'])) ? 'value="' . $lot['id'] . '"' : '' ?>>
                         <button type="submit" class="button">Сделать ставку</button>
                     </form>
                 </div>

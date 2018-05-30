@@ -205,11 +205,11 @@ function addLot(array $lot) {
     $mysqli_stmt->bind_param('iisssddi',
         $author_id,
         $lot['category'],
-        $lot['lot-name'],
+        $lot['lot_name'],
         $lot['message'],
         $lot['image_url'],
-        $lot['lot-rate'],
-        $lot['lot-step'],
+        $lot['lot_rate'],
+        $lot['lot_step'],
         $lot_end_time
     );
     if ($mysqli_stmt->execute()) {
@@ -261,6 +261,28 @@ function addNewUser(array $user) {
     return $result;
 }
 
+/** Добавляем новую ставку
+ * @param array $bet
+ * @return int|bool
+ */
+function addBet(array $bet) {
+    $db = getDbConnection();
+    $sql = "INSERT INTO bets(user_id, lot_id, price, created_at) VALUES (?,?,?,UNIX_TIMESTAMP())";
+    $mysqli_stmt = $db->prepare($sql);
+    $user_id = (int)$_SESSION['user']['id'];
+    $mysqli_stmt->bind_param('iii',
+        $user_id,
+        $bet['lot_id'],
+        $bet['cost']
+    );
+    if ($mysqli_stmt->execute()) {
+        $result = $db->insert_id;
+    } else {
+        $result = false;
+    }
+    return $result;
+}
+
 // ------------------------ БЛОК ФУНКЦИЙ ВАЛИДАТОРОВ ФОРМ ------------------------ //
 
 /** Валидация нового лота
@@ -278,14 +300,14 @@ function validateNewLot(array &$lot) {
     }
 
     // Валидация наименования
-    if (!empty($lot['lot-name'])) {
-        $lot['lot-name'] = filter_var($lot['lot-name'], FILTER_SANITIZE_STRING);
+    if (!empty($lot['lot_name'])) {
+        $lot['lot_name'] = filter_var($lot['lot_name'], FILTER_SANITIZE_STRING);
         // Обрезаем строку, если длина больше допустимой
-        if (mb_strlen($lot['lot-name']) > 255) {
-            $lot['lot-name'] = mb_substr($lot['lot-name'], 0, 255);
+        if (mb_strlen($lot['lot_name']) > 255) {
+            $lot['lot_name'] = mb_substr($lot['lot_name'], 0, 255);
         }
     } else {
-        $errors['lot-name'] = 'Введите наименование лота';
+        $errors['lot_name'] = 'Введите наименование лота';
     }
 
     // Валидация описания
@@ -300,19 +322,19 @@ function validateNewLot(array &$lot) {
     }
 
     // Валидация начальной цены
-    if (!empty($lot['lot-rate'])) {
-        $lot['lot-rate'] = filter_var($lot['lot-rate'], FILTER_SANITIZE_NUMBER_FLOAT);
-        $lot['lot-rate'] = (double)$lot['lot-rate'];
+    if (!empty($lot['lot_rate'])) {
+        $lot['lot_rate'] = filter_var($lot['lot_rate'], FILTER_SANITIZE_NUMBER_FLOAT);
+        $lot['lot_rate'] = (double)$lot['lot_rate'];
     } else {
-        $errors['lot-rate'] = 'Введите начальную цену';
+        $errors['lot_rate'] = 'Введите начальную цену';
     }
 
     // Валидация шага ставки
-    if (!empty($lot['lot-step'])) {
-        $lot['lot-step'] = filter_var($lot['lot-step'], FILTER_SANITIZE_NUMBER_FLOAT);
-        $lot['lot-step'] = (double)$lot['lot-step'];
+    if (!empty($lot['lot_step'])) {
+        $lot['lot_step'] = filter_var($lot['lot_step'], FILTER_SANITIZE_NUMBER_FLOAT);
+        $lot['lot_step'] = (double)$lot['lot_step'];
     } else {
-        $errors['lot-step'] = 'Введите шаг ставки';
+        $errors['lot_step'] = 'Введите шаг ставки';
     }
 
     // Валидация даты завершения торгов
@@ -434,5 +456,29 @@ function validateLogin(&$login) {
     if (empty($login['password'])) {
         $errors['password'] = 'Укажите пароль';
     }
+    return $errors;
+}
+
+/** Валидация добавления новой ставки
+ * @param array $bet
+ * @return array
+ */
+function validateNewBet(array &$bet) {
+    $errors = [];
+
+    // Валидация цены ставки
+    if (!empty($bet['cost'])) {
+        $bet['cost'] = filter_var($bet['cost'], FILTER_SANITIZE_NUMBER_INT);
+        $bet['cost'] = (int)$bet['cost'];
+        if (isset($bet['lot_id'])) {
+            $lot = getLot($bet['lot_id']);
+            if ($lot['current_price'] + $lot['bet_step'] > $bet['cost']) {
+                $errors['cost'] = 'Цена ставки должна быть больше текущей цены лота';
+            }
+        }
+    } else {
+        $errors['cost'] = 'Введите цену ставки';
+    }
+
     return $errors;
 }
