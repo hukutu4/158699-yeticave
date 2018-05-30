@@ -5,6 +5,8 @@
  * @var array $categories
  */
 $min_cost = $lot['current_price'] + $lot['bet_step'];
+$did_user_bet = in_array($_SESSION['user']['id'] ?? 0, array_column($bets, 'user_id'));
+$show_add_bet_form = isset($_SESSION['user']) && $_SESSION['user']['id'] != $lot['author_id'] && time() < $lot['updated_at'] && !$did_user_bet;
 ?>
 <?= renderTemplate('templates/nav.php', ['categories' => $categories]) ?>
 <section class="lot-item container">
@@ -18,9 +20,9 @@ $min_cost = $lot['current_price'] + $lot['bet_step'];
             <p class="lot-item__description"><?= htmlspecialchars($lot['description']) ?></p>
         </div>
         <div class="lot-item__right">
-            <?php if (isset($_SESSION['user'])): ?>
+            <?php if ($show_add_bet_form): ?>
                 <div class="lot-item__state">
-                    <div class="lot-item__timer timer"><?= date_create()->diff(date_create('tomorrow'))->format('%h:%I') ?></div>
+                    <div class="lot-item__timer timer"><?= date_create()->diff(date_create()->setTimestamp($lot['updated_at']))->format('%d дн. %h:%I') ?></div>
                     <div class="lot-item__cost-state">
                         <div class="lot-item__rate">
                             <span class="lot-item__amount">Текущая цена</span>

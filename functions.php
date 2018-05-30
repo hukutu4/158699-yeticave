@@ -168,6 +168,7 @@ function getBets(int $lot_id) {
     $db = getDbConnection();
     $sql = "SELECT
       u.name as 'user_name',
+      b.user_id,
       b.price,
       b.created_at
     FROM
