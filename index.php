@@ -83,6 +83,9 @@ if (isset($_GET['lot'])) {
 
 // Страница с новым лотом
 if (isset($_GET['add-lot'])) {
+    if (!isset($_SESSION['user'])) {
+        return http_response_code(403);
+    }
     $lot = [];
     $errors = [];
     if ($_POST !== []) {
