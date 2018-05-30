@@ -1,9 +1,6 @@
 <?php
 /**
  * @var string $title
- * @var bool $is_auth
- * @var string $user_avatar
- * @var string $user_name
  * @var string $content
  * @var array $categories
  */
@@ -33,12 +30,13 @@ $nav = renderTemplate('templates/nav.php', ['categories' => $categories]);;
         <a class="main-header__add-lot button" href="/?add-lot">Добавить лот</a>
 
         <nav class="user-menu">
-            <?php if ($is_auth): ?>
+            <?php if (isset($_SESSION['user'])): ?>
                 <div class="user-menu__image">
-                    <img src="<?= $user_avatar ?>" width="40" height="40" alt="Пользователь">
+                    <img src="<?= (!empty($_SESSION['user']['avatar_url']))?$_SESSION['user']['avatar_url']:'img/user.jpg' ?>" width="40" height="40" alt="Пользователь">
                 </div>
                 <div class="user-menu__logged">
-                    <p><?= $user_name ?></p>
+                    <p><?= $_SESSION['user']['name']??'' ?></p>
+                    <p><a href="/?logout">Выход</a></p>
                 </div>
             <?php else: ?>
                 <ul class="user-menu__list">
@@ -46,7 +44,7 @@ $nav = renderTemplate('templates/nav.php', ['categories' => $categories]);;
                         <a href="/?sign-up">Регистрация</a>
                     </li>
                     <li class="user-menu__item">
-                        <a href="#">Вход</a>
+                        <a href="/?login">Вход</a>
                     </li>
                 </ul>
             <?php endif; ?>

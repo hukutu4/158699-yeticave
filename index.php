@@ -1,16 +1,42 @@
 <?php
 date_default_timezone_set('Europe/Moscow');
+session_start();
 
 require_once 'functions.php';
 require_once 'queries.php';
 require_once 'validators.php';
 
-$is_auth = false;
-//$is_auth = (bool)rand(0, 1);
-
-$user_name = 'Константин';
-$user_avatar = 'img/user.jpg';
 $categories = getAllCategories();
+
+// Разлогиниваем пользователя
+if (isset($_GET['logout'])) {
+    logout();
+    header("Location: /");
+    exit;
+}
+
+// Страница регистрации
+if (isset($_GET['login'])) {
+    $title = 'Вход';
+    $login = [];
+    $errors = [];
+    if ($_POST !== []) {
+        $login = $_POST;
+    }
+    if ($login !== []) {
+        $errors = authenticate($login);
+    }
+    if ($errors === [] && $login !== []) {
+        authorize($login);
+        header("Location: /");
+        exit;
+    } else {
+        $page_content = renderTemplate('templates/login.php', [
+            'login' => $login,
+            'errors' => $errors,
+        ]);
+    }
+}
 
 // Страница регистрации
 if (isset($_GET['sign-up'])) {
@@ -28,8 +54,7 @@ if (isset($_GET['sign-up'])) {
     }
     if ($errors === [] && $new_user !== []) {
         addNewUser($new_user);
-        $url = "/?login";
-        header("Location: " . $url);
+        header("Location: /?login");
         exit;
     } else {
         $page_content = renderTemplate('templates/sign-up.php', [
@@ -71,8 +96,7 @@ if (isset($_GET['add-lot'])) {
     }
     if ($errors === [] && $lot !== []) {
         $lot_id = addLot($lot);
-        $url = "/?lot=" . $lot_id;
-        header("Location: " . $url);
+        header("Location: /?lot={$lot_id}");
         exit;
     } else {
         $page_content = renderTemplate('templates/add.php', [
@@ -90,10 +114,7 @@ if (!isset($page_content)) {
 
 // Шаблон страниц с хедером и футером (навигацией и пр.)
 $layout_content = renderTemplate('templates/layout.php', [
-    'is_auth' => $is_auth,
     'title' => $title ?? 'YetiCave',
-    'user_avatar' => $user_avatar,
-    'user_name' => $user_name,
     'content' => $page_content,
     'categories' => $categories,
 ]);
