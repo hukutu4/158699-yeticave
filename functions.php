@@ -476,6 +476,9 @@ function validateNewBet(array &$bet) {
                 $errors['cost'] = 'Цена ставки должна быть больше текущей цены лота';
             }
         }
+        if (!isset($_SESSION['user'])) {
+            $errors['cost'] = 'Только авторизованные пользователи могут делать ставки';
+        }
     } else {
         $errors['cost'] = 'Введите цену ставки';
     }
