@@ -31,10 +31,11 @@
         <nav class="user-menu">
             <?php if (isset($_SESSION['user'])): ?>
                 <div class="user-menu__image">
-                    <img src="<?= (!empty($_SESSION['user']['avatar_url']))?$_SESSION['user']['avatar_url']:'img/user.jpg' ?>" width="40" height="40" alt="Пользователь">
+                    <img src="<?= (!empty($_SESSION['user']['avatar_url'])) ? $_SESSION['user']['avatar_url'] : 'img/user.jpg' ?>"
+                         width="40" height="40" alt="Пользователь">
                 </div>
                 <div class="user-menu__logged">
-                    <p><?= $_SESSION['user']['name']??'' ?></p>
+                    <p><?= $_SESSION['user']['name'] ?? '' ?></p>
                     <p><a href="/?logout">Выход</a></p>
                 </div>
             <?php else: ?>
@@ -50,11 +51,9 @@
         </nav>
     </div>
 </header>
-
 <main>
-    <?=$content?>
+    <?= $content ?>
 </main>
-
 <footer class="main-footer">
     <nav class="nav">
         <ul class="nav__list container">
