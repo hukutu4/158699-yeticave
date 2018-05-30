@@ -3,8 +3,6 @@ date_default_timezone_set('Europe/Moscow');
 session_start();
 
 require_once 'functions.php';
-require_once 'queries.php';
-require_once 'validators.php';
 
 $categories = getAllCategories();
 
@@ -24,7 +22,7 @@ if (isset($_GET['login'])) {
         $login = $_POST;
     }
     if ($login !== []) {
-        $errors = authenticate($login);
+        $errors = validateLogin($login);
     }
     if ($errors === [] && $login !== []) {
         authorize($login);

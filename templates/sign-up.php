@@ -29,12 +29,12 @@
                   required><?= $new_user['message'] ?? '' ?></textarea>
         <span class="form__error"><?=$errors['message']??''?></span>
     </div>
-    <div class="form__item form__item--file form__item--last <?= isset($errors['avatar']) ? 'form__item--invalid' : '' ?> <?= !empty($new_user['image-url']) ? 'form__item--uploaded' : '' ?>">
+    <div class="form__item form__item--file form__item--last <?= isset($errors['avatar']) ? 'form__item--invalid' : '' ?> <?= !empty($new_user['image_url']) ? 'form__item--uploaded' : '' ?>">
         <label>Аватар</label>
         <div class="preview">
             <button class="preview__remove" type="button">x</button>
             <div class="preview__img">
-                <img src="<?=$new_user['image-url']??''?>" width="113" height="113" alt="Ваш аватар">
+                <img src="<?=$new_user['image_url']??''?>" width="113" height="113" alt="Ваш аватар">
             </div>
         </div>
         <div class="form__input-file">
@@ -42,7 +42,7 @@
             <label for="photo2">
                 <span>+ Добавить</span>
             </label>
-            <input id="image-url" type="hidden" name="image-url" <?= (isset($new_user['image-url'])) ? 'value="' . $new_user['image-url'] . '"' : '' ?>>
+            <input id="image-url" type="hidden" name="image_url" <?= (isset($new_user['image_url'])) ? 'value="' . $new_user['image_url'] . '"' : '' ?>>
         </div>
         <span class="form__error"><?=$errors['avatar']??''?></span>
     </div>

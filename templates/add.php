@@ -31,12 +31,12 @@
         <textarea id="message" name="message" placeholder="Напишите описание лота"><?= $lot['message'] ?? '' ?></textarea>
         <span class="form__error"><?=$errors['message']??''?></span>
     </div>
-    <div class="form__item form__item--file <?= isset($errors['avatar']) ? 'form__item--invalid' : '' ?> <?= !empty($lot['image-url']) ? 'form__item--uploaded' : '' ?>"><!-- form__item--uploaded -->
+    <div class="form__item form__item--file <?= isset($errors['avatar']) ? 'form__item--invalid' : '' ?> <?= !empty($lot['image_url']) ? 'form__item--uploaded' : '' ?>"><!-- form__item--uploaded -->
         <label>Изображение</label>
         <div class="preview">
             <button class="preview__remove" type="button">x</button>
             <div class="preview__img">
-                <img src="<?=$lot['image-url']??''?>" width="113" height="113" alt="Изображение лота">
+                <img src="<?=$lot['image_url']??''?>" width="113" height="113" alt="Изображение лота">
             </div>
         </div>
         <div class="form__input-file">
@@ -44,7 +44,7 @@
             <label for="photo2">
                 <span>+ Добавить</span>
             </label>
-            <input id="image-url" type="hidden" name="image-url" <?= (isset($lot['image-url'])) ? 'value="' . $lot['image-url'] . '"' : '' ?>>
+            <input id="image-url" type="hidden" name="image_url" <?= (isset($lot['image_url'])) ? 'value="' . $lot['image_url'] . '"' : '' ?>>
         </div>
         <span class="form__error"><?=$errors['avatar']??''?></span>
     </div>
