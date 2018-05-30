@@ -2,8 +2,10 @@
 /**
  * @var array $errors
  * @var array $new_user
+ * @var array $categories
  */
 ?>
+<?= renderTemplate('templates/nav.php', ['categories' => $categories]) ?>
 <form class="form container <?=($errors!==[])?'form--invalid':''?>" action="/?sign-up" method="post" enctype="multipart/form-data" > <!-- form--invalid -->
     <h2>Регистрация нового аккаунта</h2>
     <div class="form__item <?= isset($errors['email']) ? 'form__item--invalid' : '' ?>"> <!-- form__item--invalid -->

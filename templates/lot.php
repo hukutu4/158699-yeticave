@@ -2,9 +2,11 @@
 /**
  * @var array $lot
  * @var array $bets
+ * @var array $categories
  */
 $min_cost = $lot['current_price'] + $lot['bet_step'];
 ?>
+<?= renderTemplate('templates/nav.php', ['categories' => $categories]) ?>
 <section class="lot-item container">
     <h2><?=$lot['name']?></h2>
     <div class="lot-item__content">

@@ -32,6 +32,7 @@ if (isset($_GET['login'])) {
         $page_content = renderTemplate('templates/login.php', [
             'login' => $login,
             'errors' => $errors,
+            'categories' => $categories,
         ]);
     }
 }
@@ -58,6 +59,7 @@ if (isset($_GET['sign-up'])) {
         $page_content = renderTemplate('templates/sign-up.php', [
             'new_user' => $new_user,
             'errors' => $errors,
+            'categories' => $categories,
         ]);
     }
 }
@@ -73,7 +75,7 @@ if (isset($_GET['lot'])) {
     // Проверка существования лота в базе
     if (!empty($lot)) {
         $title = $lot['name'];
-        $page_content = renderTemplate('templates/lot.php', ['lot' => $lot, 'bets' => $bets]);
+        $page_content = renderTemplate('templates/lot.php', ['lot' => $lot, 'bets' => $bets, 'categories' => $categories]);
     } else {
         return http_response_code(404);
     }
