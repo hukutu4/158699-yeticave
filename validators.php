@@ -67,6 +67,10 @@ function validateNewLot(array &$lot) {
     return $errors;
 }
 
+/** Валидация данных о новом пользователе
+ * @param $new_user
+ * @return array
+ */
 function validateNewUser(&$new_user) {
     $errors = [];
 
@@ -76,7 +80,7 @@ function validateNewUser(&$new_user) {
         if (!empty($user)) {
             $errors['email'] = 'Пользователь с указанным e-mail уже существует';
         }
-        if (mb_strlen($new_user['email']) > 255){
+        if (mb_strlen($new_user['email']) > 255) {
             $errors['email'] = 'E-mail не должен превышать 255 символов';
         }
     } else {
@@ -145,4 +149,28 @@ function validateAvatarImage(&$subject, &$errors, $required = true) {
         $errors['avatar'] = 'Добавьте фотографию';
     }
     return empty($errors['avatar']);
+}
+
+/** Аутентификация пользователя при входе
+ * @param $login
+ * @return array
+ */
+function authenticate(&$login) {
+    $main_err_message = 'Логин и(или) пароль указаны не корректно';
+    $errors = [];
+    if (filter_var($login['email'], FILTER_VALIDATE_EMAIL)) {
+        $user = getUserByEmail($login['email']);
+        if (empty($user)) {
+            $errors['main'] = $main_err_message;
+        } elseif (!password_verify($login['password'], $user['password'])) {
+            $errors['main'] = $main_err_message;
+        }
+    } else {
+        $errors['email'] = 'Введите корректный e-mail';
+    }
+    if (empty($login['password'])) {
+        $errors['password'] = 'Укажите пароль';
+    }
+
+    return $errors;
 }

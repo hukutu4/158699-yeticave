@@ -16,6 +16,7 @@ $min_cost = $lot['current_price'] + $lot['bet_step'];
             <p class="lot-item__description"><?=$lot['description']?></p>
         </div>
         <div class="lot-item__right">
+            <?php if(isset($_SESSION['user'])): ?>
             <div class="lot-item__state">
                 <div class="lot-item__timer timer"><?=date_create()->diff(date_create('tomorrow'))->format('%h:%I')?></div>
                 <div class="lot-item__cost-state">
@@ -35,6 +36,7 @@ $min_cost = $lot['current_price'] + $lot['bet_step'];
                     <button type="submit" class="button">Сделать ставку</button>
                 </form>
             </div>
+            <?php endif; ?>
             <div class="history">
                 <h3>История ставок (<span><?= count($bets) ?></span>)</h3>
                 <table class="history__list">

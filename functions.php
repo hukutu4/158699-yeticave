@@ -22,3 +22,24 @@ function renderTemplate($filename, $params = []) {
 function rurNumberFormat(int $price) {
     return number_format($price, 0, '.', ' ') . '<b class="rub">р</b>';
 }
+
+/** Авторизация пользователя
+ * @param array $login
+ * @return bool
+ */
+function authorize($login) {
+    $user = getUserByEmail($login['email']);
+    if (!empty($user)) {
+        unset($user['password']);
+        $_SESSION['user'] = $user;
+        return true;
+    }
+    return false;
+}
+
+/**
+ * Разлогиниваем пользователя
+ */
+function logout():void {
+    unset($_SESSION['user']);
+}
