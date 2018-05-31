@@ -34,7 +34,7 @@ $show_add_bet_form = isset($_SESSION['user']) && $_SESSION['user']['id'] != $lot
                             Мин. ставка <span><?= rurNumberFormat($min_cost) ?></span>
                         </div>
                     </div>
-                    <form class="lot-item__form <?= ($errors !== []) ? 'form--invalid' : '' ?>" action="/lot?id=<?= $lot['id'] ?>" method="post">
+                    <form class="lot-item__form <?= ($errors !== []) ? 'form--invalid' : '' ?>" action="/lot.php?id=<?= $lot['id'] ?>" method="post">
                         <p class="lot-item__form-item <?= isset($errors['cost']) ? 'form__item--invalid' : '' ?>">
                             <label for="cost">Ваша ставка</label>
                             <input id="cost" type="number" name="cost" <?= (isset($new_bet['cost'])) ? 'value="' . $new_bet['cost'] . '"' : '' ?>
