@@ -1,5 +1,4 @@
 <?php
-
 /** Шаблонизатор
  * @param string $filename
  * @param array $params
