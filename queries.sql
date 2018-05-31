@@ -5,8 +5,9 @@ USE yeti;
 INSERT INTO `users`
 (`id`, `email`, `name`, `password`, `avatar_url`, `contacts`, `created_at`)
 VALUES
-  (1, 'kostya@kost.ru', 'Константин', '123', 'img/user.jpg', '+79995554433', 1526539847),
-  (2, 'petr.pervyi@petr.ru', 'Пётр', '321', NULL, '+71111111111', 1526539999);
+  (1, 'ignat.v@gmail.com', 'Игнат', '$2y$10$OqvsKHQwr0Wk6FMZDoHo1uHoXd4UdxJG/5UDtUiie00XaxMHrW8ka', NULL, '+79995554433', 1526539847),
+  (2, 'kitty_93@li.ru', 'Леночка', '$2y$10$bWtSjUhwgggtxrnJ7rxmIe63ABubHQs0AS0hgnOo41IEdMHkYoSVa', NULL, '+71111111111', 1526539999),
+  (3, 'warrior07@mail.ru', 'Руслан', '$2y$10$2OxpEH7narYpkOT1H5cApezuzh10tZEEQ2axgFOaKW.55LxIJBgWW', NULL, '+71111111111', 1526539999);
 
 # Категории
 INSERT INTO `categories`

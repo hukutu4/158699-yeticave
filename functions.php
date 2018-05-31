@@ -15,6 +15,24 @@ function renderTemplate($filename, $params = []) {
     return '';
 }
 
+/** Выводим шаблон страницы с хедером, футером и заданным контентом
+ * @param string $title
+ * @param string $page_content
+ * @return void
+ */
+function printLayout($title = '', $page_content = ''): void {
+    $result_title = 'YetiCave';
+    if ($title !== '') {
+        $result_title .= ' - ' . $title;
+    }
+    $layout_content = renderTemplate('templates/layout.php', [
+        'title' => $result_title,
+        'content' => $page_content,
+        'categories' => getAllCategories(),
+    ]);
+    print($layout_content);
+}
+
 /** Форматирует целое число, представляя его в виде строки, с разделителем пробелом для тысяч, дополненным знаком рубля.
  * @param int $price
  * @return string
@@ -417,6 +435,7 @@ function validateAvatarImage(&$subject, &$errors, $required = true) {
         $file_name = $subject['avatar']['tmp_name'];
         $file_size = $subject['avatar']['size'];
         $file_type = finfo_file($finfo, $file_name);
+        finfo_close($finfo);
         if ($file_type !== 'image/jpeg') {
             $errors['avatar'] = "Загрузите картинку в формате jpeg";
         }
