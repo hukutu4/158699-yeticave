@@ -16,7 +16,7 @@ if ($new_user !== []) {
 }
 if ($errors === [] && $new_user !== []) {
     addNewUser($new_user);
-    header("Location: /login.php");
+    header("Location: /login");
     exit;
 } else {
     $page_content = renderTemplate('templates/sign-up.php', [

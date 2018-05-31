@@ -6,7 +6,7 @@
  */
 ?>
 <?= renderTemplate('templates/nav.php', ['categories' => $categories]) ?>
-<form class="form form--add-lot container <?= ($errors !== []) ? 'form--invalid' : '' ?>" action="/add.php"
+<form class="form form--add-lot container <?= ($errors !== []) ? 'form--invalid' : '' ?>" action="/add"
       method="post" enctype="multipart/form-data"> <!-- form--invalid -->
     <h2>Добавление лота</h2>
     <div class="form__container-two">

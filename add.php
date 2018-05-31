@@ -19,7 +19,7 @@ if ($lot !== []) {
 }
 if ($errors === [] && $lot !== []) {
     $lot_id = addLot($lot);
-    header("Location: /lot.php?id={$lot_id}");
+    header("Location: /lot?id={$lot_id}");
     exit;
 } else {
     $page_content = renderTemplate('templates/add.php', [
